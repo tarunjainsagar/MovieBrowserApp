@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// todo: externalize key to configuration file
 const TMDB_API_KEY = 'YOUR_TMDB_API_KEY';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
