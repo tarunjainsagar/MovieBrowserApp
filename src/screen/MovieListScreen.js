@@ -1,8 +1,9 @@
-// MovieListScreen.js
-
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { fetchNowPlayingMovies, fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies } from '@api/TheMovieDatabase.js';
+import MovieTile from '@component/MovieTile.js';
+
+const windowWidth = Dimensions.get('window').width;
 
 function MovieListScreen({ listType }) {
   const [movies, setMovies] = useState([]);
@@ -10,7 +11,6 @@ function MovieListScreen({ listType }) {
 
   useEffect(() => {
     let fetchFunction;
-
     // Determine the appropriate fetch function based on the listType parameter
     switch (listType) {
       case 'nowplaying':
@@ -40,21 +40,23 @@ function MovieListScreen({ listType }) {
   }, [listType]);
 
   return (
-    <View>
-      <Text>{typename} Movies</Text>
+    <View style={styles.container}>
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id.toString()}
+        numColumns={2} // Display movies in 2 columns
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
-            <Text>Release Date: {item.release_date}</Text>
-            <Text>Average Rating: {item.vote_average}</Text>
-          </View>
+          <MovieTile movie={item} />
         )}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+});
 
 export default MovieListScreen;
