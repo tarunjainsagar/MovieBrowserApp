@@ -20,6 +20,7 @@ const UserProvider = ({ children }) => {
                     setUserContext(JSON.parse(savedUserContext));
                     setShowSnackbar(true);
                 } else {
+                    // todo: create account - https://developer.themoviedb.org/reference/authentication-how-do-i-generate-a-session-id
                     // Create a guest session
                     const guestSessionId = await createGuestSession();
 
@@ -42,15 +43,13 @@ const UserProvider = ({ children }) => {
         <UserContext.Provider value={{ userContext, setUserContext }}>
             <SafeAreaProvider>
                 {children}
-
                 <Snackbar
                     visible={showSnackbar}
                     onDismiss={() => setShowSnackbar(false)}
-                    duration={5000} // Hide the Snackbar after 5 seconds
+                    duration={2000}
                 >
                     {userContext ? `Logged in as ${userContext.session_id}` : 'Created guest user.'}
                 </Snackbar>
-
             </SafeAreaProvider>
         </UserContext.Provider>
 

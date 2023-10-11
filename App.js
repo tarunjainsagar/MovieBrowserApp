@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MovieListScreen from '@screen/MovieListScreen';
 import HomeScreen from '@screen/HomeScreen';
+import ProfileScreen from '@screen/ProfileScreen';
 import AppHeader from '@component/AppHeader';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -59,7 +60,7 @@ export default function App() {
                   <Ionicons name="person" color={color} size={size} />
                 ),
               }}>
-              {() => <MovieListScreen listType="upcoming" />}
+              {() => <ProfileScreen />}
             </Tab.Screen>
           </Tab.Navigator>
         </NavigationContainer>

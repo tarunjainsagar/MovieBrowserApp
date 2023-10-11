@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Snackbar } from 'react-native-paper'; // Import Snackbar from react-native-paper
+import { Snackbar } from 'react-native-paper';
 
 function MovieDetailModal({ movie, onClose }) {
     const posterUri = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
@@ -11,7 +11,7 @@ function MovieDetailModal({ movie, onClose }) {
         setSnackbarVisible(true);
         setTimeout(() => {
             setSnackbarVisible(false);
-        }, 5000); // Hide the Snackbar after 5 seconds
+        }, 2000);
     };
 
     return (
@@ -60,7 +60,7 @@ function MovieDetailModal({ movie, onClose }) {
                 <Snackbar
                     visible={snackbarVisible}
                     onDismiss={() => setSnackbarVisible(false)}
-                    duration={5000} // 5 seconds
+                    duration={2000}
                 >
                     This feature is coming soon...
                 </Snackbar>
