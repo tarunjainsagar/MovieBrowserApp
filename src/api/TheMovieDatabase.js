@@ -46,3 +46,16 @@ export const fetchUpcomingMovies = async () => {
     throw error;
   }
 };
+
+export const searchMovies = async (query) => {
+  try {
+    const response = await api.get('/movie', {
+      params: {
+        query, // The user's search query
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    throw error;
+  }
+};
