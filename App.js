@@ -5,6 +5,7 @@ import MovieListScreen from '@screen/MovieListScreen';
 import HomeScreen from '@screen/HomeScreen';
 import ProfileScreen from '@screen/ProfileScreen';
 import SearchScreen from '@screen/SearchScreen';
+import FavouriteScreen from '@screen/FavouriteScreen';
 import AppHeader from '@component/AppHeader';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,7 +51,7 @@ export default function App() {
                   <Ionicons name="heart" color={color} size={size} />
                 ),
               }}>
-              {() => <MovieListScreen listType="popular" />}
+              {() => <FavouriteScreen />}
             </Tab.Screen>
             <Tab.Screen
               name="Profile"

@@ -86,6 +86,19 @@ export const searchMovies = async (query) => {
   }
 };
 
+export const fetchFavoriteMovies = async (page = 1) => {
+  try {
+    const response = await api.get('/account/${TMDB_ACCOUNT_ID}/favorite/movies', {
+      params: {
+        page, // Specify the page number
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // todo: figure out why the API is not working with session_id
 
 // export const addMovieToFavorites = async (session_id, movie_id) => {
