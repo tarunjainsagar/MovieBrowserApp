@@ -9,7 +9,8 @@
                 "alias": {
                     "@api": "./src/api",
                     "@screen": "./src/screen",
-                    "@component": "./src/component"
+                    "@component": "./src/component",
+                    "@util": "./src/util"
                 }
             }
         ]

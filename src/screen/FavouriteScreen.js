@@ -1,45 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
-import { fetchFavoriteMovies } from '@api/TheMovieDatabase';
 import MovieTile from '@component/MovieTile';
+import { useUserContext } from '../context/UserContext';
+import { getFavoriteMovies } from '@util/FavoriteMoviesUtility';
 
 function FavouriteScreen() {
+    const { userContext } = useUserContext();
     const [movies, setMovies] = useState([]);
-    const [page, setPage] = useState(1);
-    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
-        fetchData();
-    }, [page]);
-
-    const fetchData = async () => {
-        if (isFetching) {
-            return; // Prevent multiple simultaneous requests
-        }
-
-        setIsFetching(true);
-        try {
-            const data = await fetchFavoriteMovies(page);
-            if (data.length > 0) {
-                // Add a timestamp for uniqueness
-                const moviesWithTimestamp = data.map((item) => ({
-                    ...item,
-                    timestamp: Date.now(), // Use a timestamp for uniqueness
-                }));
-                setMovies((prevMovies) => [...prevMovies, ...moviesWithTimestamp]);
-                setPage(page + 1);
+        const fetchData = async () => {
+            if (!userContext || !userContext.session_id) {
+                return;
             }
-        } catch (error) {
-            console.error('Error fetching favorite movies:', error);
-        } finally {
-            setIsFetching(false);
-        }
-    };
 
-    const handleEndReached = () => {
-        // Fetch more data when you reach the end of the list
+            try {
+                const favoriteMovies = await getFavoriteMovies(userContext.session_id);
+                console.log(favoriteMovies)
+                setMovies(favoriteMovies);
+            } catch (error) {
+                console.error('Error fetching favorite movies:', error);
+            }
+        };
+
         fetchData();
-    };
+    }, [userContext]);
 
     return (
         <View style={styles.container}>
@@ -48,8 +33,6 @@ function FavouriteScreen() {
                 keyExtractor={(item) => `${item.id}_${item.timestamp}`} // Use a combination of ID and timestamp for the key
                 numColumns={2}
                 renderItem={({ item }) => <MovieTile movie={item} />}
-                onEndReached={handleEndReached}
-                onEndReachedThreshold={0.5}
             />
         </View>
     );
