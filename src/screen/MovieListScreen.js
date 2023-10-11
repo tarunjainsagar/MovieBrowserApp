@@ -3,8 +3,6 @@ import { View, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { fetchNowPlayingMovies, fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies } from '@api/TheMovieDatabase.js';
 import MovieTile from '@component/MovieTile.js';
 
-const windowWidth = Dimensions.get('window').width;
-
 function MovieListScreen({ listType }) {
   const [movies, setMovies] = useState([]);
 
@@ -30,7 +28,9 @@ function MovieListScreen({ listType }) {
 
     // Fetch the movie data based on the selected list type
     fetchFunction()
-      .then((data) => setMovies(data))
+      .then((data) => {
+        setMovies(data);
+      })
       .catch((error) => console.error(`Error fetching ${listType} movies:`, error));
   }, [listType]);
 
@@ -51,7 +51,7 @@ function MovieListScreen({ listType }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
 });
 
 export default MovieListScreen;
