@@ -12,36 +12,52 @@ const api = axios.create({
   },
 });
 
-export const fetchNowPlayingMovies = async () => {
+export const fetchNowPlayingMovies = async (page = 1) => {
   try {
-    const response = await api.get('/movie/now_playing');
+    const response = await api.get('/movie/now_playing', {
+      params: {
+        page, // Specify the page number
+      },
+    });
     return response.data.results;
   } catch (error) {
     throw error;
   }
 };
 
-export const fetchPopularMovies = async () => {
+export const fetchPopularMovies = async (page = 1) => {
   try {
-    const response = await api.get('/movie/popular');
+    const response = await api.get('/movie/popular', {
+      params: {
+        page, // Specify the page number
+      },
+    });
     return response.data.results;
   } catch (error) {
     throw error;
   }
 };
 
-export const fetchTopRatedMovies = async () => {
+export const fetchTopRatedMovies = async (page = 1) => {
   try {
-    const response = await api.get('/movie/top_rated');
+    const response = await api.get('/movie/top_rated', {
+      params: {
+        page, // Specify the page number
+      },
+    });
     return response.data.results;
   } catch (error) {
     throw error;
   }
 };
 
-export const fetchUpcomingMovies = async () => {
+export const fetchUpcomingMovies = async (page = 1) => {
   try {
-    const response = await api.get('/movie/upcoming');
+    const response = await api.get('/movie/upcoming', {
+      params: {
+        page, // Specify the page number
+      },
+    });
     return response.data.results;
   } catch (error) {
     throw error;

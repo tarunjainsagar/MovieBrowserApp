@@ -5,44 +5,68 @@ import MovieTile from '@component/MovieTile.js';
 
 function MovieListScreen({ listType }) {
   const [movies, setMovies] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(false);
 
-  useEffect(() => {
-    let fetchFunction;
-    // Determine the appropriate fetch function based on the listType parameter
+  const fetchFunction = (page) => {
     switch (listType) {
       case 'nowplaying':
-        fetchFunction = fetchNowPlayingMovies;
-        break;
+        return fetchNowPlayingMovies(page);
       case 'popular':
-        fetchFunction = fetchPopularMovies;
-        break;
+        return fetchPopularMovies(page);
       case 'toprated':
-        fetchFunction = fetchTopRatedMovies;
-        break;
+        return fetchTopRatedMovies(page);
       case 'upcoming':
-        fetchFunction = fetchUpcomingMovies;
-        break;
+        return fetchUpcomingMovies(page);
       default:
-        fetchFunction = fetchNowPlayingMovies; // Default to Now Playing if listType is not recognized
+        return fetchNowPlayingMovies(page);
+    }
+  };
+
+  useEffect(() => {
+    setMovies([]); // Reset movies when listType changes
+    setPage(1);
+    fetchData();
+  }, [listType]);
+
+  const fetchData = async () => {
+    if (isFetching) {
+      return; // Prevent multiple simultaneous requests
     }
 
-    // Fetch the movie data based on the selected list type
-    fetchFunction()
-      .then((data) => {
-        setMovies(data);
-      })
-      .catch((error) => console.error(`Error fetching ${listType} movies:`, error));
-  }, [listType]);
+    setIsFetching(true);
+    try {
+      const data = await fetchFunction(page);
+      if (data.length > 0) {
+        // Add a timestamp for uniqueness
+        const moviesWithTimestamp = data.map((item) => ({
+          ...item,
+          timestamp: Date.now(), // Use a timestamp for uniqueness
+        }));
+        setMovies((prevMovies) => [...prevMovies, ...moviesWithTimestamp]);
+        setPage(page + 1);
+      }
+    } catch (error) {
+      console.error(`Error fetching ${listType} movies:`, error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handleEndReached = () => {
+    // Fetch more data when you reach the end of the list
+    fetchData();
+  };
 
   return (
     <View style={styles.container}>
       <FlatList
         data={movies}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2} // Display movies in 2 columns
-        renderItem={({ item }) => (
-          <MovieTile movie={item} />
-        )}
+        keyExtractor={(item) => `${item.id}_${item.timestamp}`} // Use a combination of ID and timestamp for the key
+        numColumns={2}
+        renderItem={({ item }) => <MovieTile movie={item} />}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );
