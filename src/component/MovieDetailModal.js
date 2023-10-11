@@ -2,16 +2,32 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Snackbar } from 'react-native-paper';
+import { useUserContext } from '../context/UserContext';
+import { addMovieToFavorites } from '@api/TheMovieDatabase.js';
 
 function MovieDetailModal({ movie, onClose }) {
     const posterUri = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
     const [snackbarVisible, setSnackbarVisible] = useState(false);
+    const { userContext } = useUserContext();
 
     const showSnackbar = () => {
         setSnackbarVisible(true);
         setTimeout(() => {
             setSnackbarVisible(false);
         }, 2000);
+    };
+
+    const handleAddToFavorites = async () => {
+        if (userContext) {
+            try {
+                await addMovieToFavorites(userContext.session_id, movie.id);
+                showSnackbar(); // Show a success message
+            } catch (error) {
+                console.error('Error adding to favorites:', error);
+            }
+        } else {
+            console.warn('User is not logged in');
+        }
     };
 
     return (
@@ -30,21 +46,15 @@ function MovieDetailModal({ movie, onClose }) {
                         <Text style={styles.info}>Release Date: {movie.release_date}</Text>
                         <Text style={styles.info}>Average Rating: {movie.vote_average}</Text>
                         <View style={styles.iconContainer}>
-                            <TouchableOpacity style={styles.icon}>
+                            <TouchableOpacity style={styles.icon} onPress={handleAddToFavorites}>
                                 <Ionicons name="heart" color={"white"} size={40} />
                                 <Text style={styles.iconText}>Favourite</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.icon}
-                                onPress={showSnackbar}
-                            >
+                            <TouchableOpacity style={styles.icon} onPress={showSnackbar}>
                                 <Ionicons name="add" color={"white"} size={40} />
                                 <Text style={styles.iconText}>Add</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.icon}
-                                onPress={showSnackbar}
-                            >
+                            <TouchableOpacity style={styles.icon} onPress={showSnackbar}>
                                 <Ionicons name="share" color={"white"} size={40} />
                                 <Text style={styles.iconText}>Share</Text>
                             </TouchableOpacity>
