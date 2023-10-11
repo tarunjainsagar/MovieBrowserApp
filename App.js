@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MovieListScreen from '@screen/MovieListScreen';
 import HomeScreen from '@screen/HomeScreen';
 import ProfileScreen from '@screen/ProfileScreen';
+import SearchScreen from '@screen/SearchScreen';
 import AppHeader from '@component/AppHeader';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -38,7 +39,7 @@ export default function App() {
                   <Ionicons name="search" color={color} size={size} />
                 ),
               }}>
-              {() => <MovieListScreen listType="toprated" />}
+              {() => <SearchScreen />}
             </Tab.Screen>
             <Tab.Screen
               name="Favourite"
