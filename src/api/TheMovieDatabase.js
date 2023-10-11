@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // todo: externalize key to configuration file
-const TMDB_API_KEY = 'YOUR_TMDB_API_KEY';
-const TMDB_ACCOUNT_ID = 'YOUR_TMDB_ACCOUNT_ID';
+const TMDB_API_KEY = '89311cc6b6957c852fb4743dffffba71';
+const TMDB_ACCOUNT_ID = '20551648';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 const api = axios.create({
