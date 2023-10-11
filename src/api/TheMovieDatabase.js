@@ -47,6 +47,15 @@ export const fetchUpcomingMovies = async () => {
   }
 };
 
+export const createGuestSession = async () => {
+  try {
+    const response = await api.get(`/authentication/guest_session/new`);
+    return response.data.guest_session_id;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const searchMovies = async (query) => {
   try {
     const response = await api.get('/movie', {
