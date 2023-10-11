@@ -1,8 +1,18 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, Modal, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, Modal, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Snackbar } from 'react-native-paper'; // Import Snackbar from react-native-paper
 
 function MovieDetailModal({ movie, onClose }) {
     const posterUri = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+    const [snackbarVisible, setSnackbarVisible] = useState(false);
+
+    const showSnackbar = () => {
+        setSnackbarVisible(true);
+        setTimeout(() => {
+            setSnackbarVisible(false);
+        }, 5000); // Hide the Snackbar after 5 seconds
+    };
 
     return (
         <Modal
@@ -11,20 +21,49 @@ function MovieDetailModal({ movie, onClose }) {
             visible={true}
         >
             <View style={styles.container}>
-                <Image source={{ uri: posterUri }} style={styles.image} resizeMode="cover" />
-
-                <ScrollView style={styles.detailsContainer}>
-                    <View style={styles.overlay}>
+                <View style={styles.detailsContainer}>
+                    <View style={styles.posterContainer}>
+                        <Image source={{ uri: posterUri }} style={styles.posterImage} resizeMode="cover" />
+                    </View>
+                    <View style={styles.details}>
                         <Text style={styles.title}>{movie.title}</Text>
                         <Text style={styles.info}>Release Date: {movie.release_date}</Text>
                         <Text style={styles.info}>Average Rating: {movie.vote_average}</Text>
-                        <Text style={styles.info}>Overview: {movie.overview}</Text>
+                        <View style={styles.iconContainer}>
+                            <TouchableOpacity style={styles.icon}>
+                                <Ionicons name="heart" color={"white"} size={40} />
+                                <Text style={styles.iconText}>Favourite</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.icon}
+                                onPress={showSnackbar}
+                            >
+                                <Ionicons name="add" color={"white"} size={40} />
+                                <Text style={styles.iconText}>Add</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.icon}
+                                onPress={showSnackbar}
+                            >
+                                <Ionicons name="share" color={"white"} size={40} />
+                                <Text style={styles.iconText}>Share</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.blankSpace} />
+                        <Text style={styles.overview}>{movie.overview}</Text>
                     </View>
-                </ScrollView>
+                </View>
 
                 <TouchableOpacity style={styles.backButton} onPress={onClose}>
-                    <Text style={styles.backButtonText}>Back</Text>
+                    <Ionicons name="arrow-back" color={"white"} size={30} />
                 </TouchableOpacity>
+                <Snackbar
+                    visible={snackbarVisible}
+                    onDismiss={() => setSnackbarVisible(false)}
+                    duration={5000} // 5 seconds
+                >
+                    This feature is coming soon...
+                </Snackbar>
             </View>
         </Modal>
     );
@@ -36,37 +75,67 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
     },
     image: {
-        flex: 1,
+        flex: 0.5,
     },
     detailsContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        flex: 0.5,
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-    overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 8,
+    posterContainer: {
+        marginTop: 60,
+        marginBottom: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    posterImage: {
+        width: 250,
+        height: 325,
+    },
+    details: {
+        paddingHorizontal: 20,
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 60,
         marginBottom: 4,
         color: '#FFF',
+        textAlign: 'center',
     },
     info: {
-        fontSize: 14,
-        marginBottom: 2,
+        fontSize: 18,
+        marginBottom: 8,
+        color: '#FFF',
+        textAlign: 'center',
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 12,
+    },
+    icon: {
+        // todo: later
+    },
+    iconText: {
+        color: '#FFF',
+        textAlign: 'center',
+    },
+    blankSpace: {
+        marginBottom: 20,
+    },
+    overviewTitle: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#FFF',
+    },
+    overview: {
+        fontSize: 16,
         color: '#FFF',
     },
     backButton: {
         position: 'absolute',
         top: 20,
         left: 20,
-    },
-    backButtonText: {
-        color: 'red',
-        fontSize: 16,
     },
 });
 
